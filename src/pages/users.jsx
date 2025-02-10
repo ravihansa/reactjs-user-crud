@@ -1,8 +1,10 @@
-import React from "react";
-import { registerUser } from "../services/api";
+import React, { useEffect, useState } from "react";
+import UserTable from "../components/user/userTable";
 import RegisterForm from "../components/user/userForm";
+import { registerUser, getAllUsers } from "../services/api";
 
-const RegisterPage = () => {
+
+export const RegisterPage = () => {
     const handleRegister = async (userData) => {
         try {
             const response = await registerUser(userData);
@@ -20,4 +22,28 @@ const RegisterPage = () => {
     return <RegisterForm onRegister={handleRegister} />;
 };
 
-export default RegisterPage;
+export const UserList = () => {
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        const getUsers = async () => {
+            try {
+                const response = await getAllUsers();
+                if (response.data?.status) {
+                    setUsers(response.data.data);
+                } else {
+                    alert(response.data?.message);
+                }
+            } catch (error) {
+                console.error("Error fetching users", error);
+                alert(error.message);
+            }
+        };
+        getUsers();
+    }, []);
+
+    return (
+        <div>
+            <UserTable users={users} />
+        </div>
+    );
+};
