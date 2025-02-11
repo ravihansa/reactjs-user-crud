@@ -1,39 +1,46 @@
-import React from "react";
+import { useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { TextField, Box, Typography } from "@mui/material";
 import "../../styles/userList.css";
 
 const UserTable = ({ users }) => {
+    const [searchText, setSearchText] = useState("");
+
+    // Filter users based on search input
+    const filteredUsers = users.filter((user) =>
+        user.userName.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const columns = [
+        { field: "id", headerName: "ID", width: 80, disableColumnMenu: true },
+        { field: "userName", headerName: "Username", flex: 1, disableColumnMenu: true },
+        { field: "email", headerName: "Email", flex: 2, disableColumnMenu: true },
+        { field: "fName", headerName: "First Name", flex: 1, disableColumnMenu: true },
+        { field: "lName", headerName: "Last Name", flex: 1, disableColumnMenu: true },
+    ];
+
     return (
-        <div className="user-table-container">
-            <h2>User List</h2>
-            <table className="user-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Username</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.length > 0 ? (
-                        users.map((user) => (
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.fName}</td>
-                                <td>{user.lName}</td>
-                                <td>{user.email}</td>
-                                <td>{user.userName}</td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="5">No users found.</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        </div>
+        <Box className="user-table-container">
+            <Typography variant="h5" className="table-title">
+                User List
+            </Typography>
+            <TextField
+                label="Search by Username"
+                variant="outlined"
+                size="small"
+                className="search-input"
+                onChange={(e) => setSearchText(e.target.value)}
+            />
+            <DataGrid
+                rows={filteredUsers}
+                columns={columns}
+                pageSizeOptions={[5, 10, 20]}
+                initialState={{
+                    pagination: { paginationModel: { pageSize: 5 } },
+                }}
+                className="custom-table"
+            />
+        </Box>
     );
 };
 

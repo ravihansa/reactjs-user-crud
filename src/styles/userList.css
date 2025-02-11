@@ -1,24 +1,39 @@
 .user-table-container {
+    width: 80%;
+    margin: 20px auto;
     padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.user-table {
+.table-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.search-input {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+    margin-bottom: 15px;
 }
 
-.user-table th,
-.user-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+.custom-table .MuiDataGrid-root {
+    border-radius: 8px;
+    background: #f9f9f9;
 }
 
-.user-table th {
-    background-color: #f4f4f4;
+.custom-table .MuiDataGrid-cell {
+    font-size: 14px;
 }
 
-.user-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+.custom-table .MuiDataGrid-columnHeaders {
+    background: #b2b4bd;
+    color: rgb(78, 78, 78) !important;
+    /* Ensure text color is visible */
+    font-weight: bold;
+    font-size: 16px;
+    /* Increase font size */
+    text-transform: uppercase;
+    padding: 2px 0;
 }
