@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserTable from "../components/user/userTable";
 import RegisterForm from "../components/user/userForm";
 import { registerUser, getAllUsers } from "../services/api";
+import { Alert, Snackbar } from "@mui/material";
 
 
 export const RegisterPage = () => {
@@ -25,6 +26,8 @@ export const RegisterPage = () => {
 export const UserList = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [openAlert, setOpenAlert] = useState(false);
 
     useEffect(() => {
         const getUsers = async () => {
@@ -33,11 +36,13 @@ export const UserList = () => {
                 if (response.data?.status) {
                     setUsers(response.data.data);
                 } else {
-                    alert(response.data?.message);
+                    setError(response.data?.message);
+                    setOpenAlert(true);
                 }
             } catch (error) {
-                console.error("Error fetching users", error);
-                alert(error.message);
+                console.error("Failed to fetch users", error);
+                setError("Failed to fetch users.");
+                setOpenAlert(true);
             } finally {
                 setLoading(false);
             }
@@ -47,6 +52,17 @@ export const UserList = () => {
 
     return (
         <div>
+            <Snackbar
+                open={openAlert}
+                autoHideDuration={5000}
+                onClose={() => setOpenAlert(false)}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+                <Alert
+                    severity="error"
+                    onClose={() => setOpenAlert(false)}>
+                    {error}
+                </Alert>
+            </Snackbar>
             <UserTable users={users} loading={loading} />
         </div>
     );
