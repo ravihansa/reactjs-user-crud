@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextField, Box, Typography } from "@mui/material";
+import { TextField, Box, Typography, LinearProgress } from "@mui/material";
 import "../../styles/userList.css";
 
-const UserTable = ({ users }) => {
+const UserTable = ({ users, loading }) => {
     const [searchText, setSearchText] = useState("");
 
     // Filter users based on search input
@@ -32,13 +32,21 @@ const UserTable = ({ users }) => {
                 onChange={(e) => setSearchText(e.target.value)}
             />
             <DataGrid
-                rows={filteredUsers}
+
+                rows={filteredUsers.length ? filteredUsers : []}
                 columns={columns}
+                pagination
+                rowCount={filteredUsers.length}
+                pageSize={5}
                 pageSizeOptions={[5, 10, 20]}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 5 } },
                 }}
                 className="custom-table"
+                loading={loading} // Show loading spinner
+                components={{
+                    LoadingOverlay: LinearProgress
+                }}
             />
         </Box>
     );

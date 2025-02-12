@@ -24,6 +24,8 @@ export const RegisterPage = () => {
 
 export const UserList = () => {
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const getUsers = async () => {
             try {
@@ -36,6 +38,8 @@ export const UserList = () => {
             } catch (error) {
                 console.error("Error fetching users", error);
                 alert(error.message);
+            } finally {
+                setLoading(false);
             }
         };
         getUsers();
@@ -43,7 +47,7 @@ export const UserList = () => {
 
     return (
         <div>
-            <UserTable users={users} />
+            <UserTable users={users} loading={loading} />
         </div>
     );
 };
