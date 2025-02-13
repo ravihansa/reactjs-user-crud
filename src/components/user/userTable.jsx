@@ -1,15 +1,27 @@
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextField, Box, Typography, LinearProgress } from "@mui/material";
+import { TextField, Box, Typography, LinearProgress, Button } from "@mui/material";
+import UpdateUserModal from "./updateModal";
 import "../../styles/userList.css";
 
-const UserTable = ({ users, loading }) => {
+const UserTable = ({ users, loading, handleUpdateUser }) => {
     const [searchText, setSearchText] = useState("");
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
 
     // Filter users based on search input
     const filteredUsers = users.filter((user) =>
         user.userName.toLowerCase().includes(searchText.toLowerCase())
     );
+
+    const handleEdit = (user) => {
+        setSelectedUser(user);
+        setOpenModal(true);
+    };
+
+    const handleDelete = (id) => {
+        console.log("Delete user with ID:", id);
+    };
 
     const columns = [
         { field: "id", headerName: "ID", width: 80, disableColumnMenu: true },
@@ -17,6 +29,33 @@ const UserTable = ({ users, loading }) => {
         { field: "email", headerName: "Email", flex: 2, disableColumnMenu: true },
         { field: "fName", headerName: "First Name", flex: 1, disableColumnMenu: true },
         { field: "lName", headerName: "Last Name", flex: 1, disableColumnMenu: true },
+        {
+            field: "actions",
+            headerName: "Actions",
+            width: 180,
+            sortable: false,
+            renderCell: (params) => (
+                <Box>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEdit(params.row)}
+                        style={{ marginRight: 8 }}
+                    >
+                        Update
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="warning"
+                        size="small"
+                        onClick={() => handleDelete(params.row.id)}
+                    >
+                        Delete
+                    </Button>
+                </Box>
+            ),
+        },
     ];
 
     return (
@@ -32,7 +71,6 @@ const UserTable = ({ users, loading }) => {
                 onChange={(e) => setSearchText(e.target.value)}
             />
             <DataGrid
-
                 rows={filteredUsers.length ? filteredUsers : []}
                 columns={columns}
                 pagination
@@ -48,6 +86,15 @@ const UserTable = ({ users, loading }) => {
                     LoadingOverlay: LinearProgress
                 }}
             />
+            {/* Update User Modal */}
+            {openModal && (
+                <UpdateUserModal
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                    user={selectedUser}
+                    handleUpdateUser={handleUpdateUser}
+                />
+            )}
         </Box>
     );
 };

@@ -9,3 +9,7 @@ export const registerUser = async (userData) => {
 export const getAllUsers = async () => {
     return axios.get(`${apiBaseUrl}/users/list`);
 };
+
+export const updateUser = async (userId, userData) => {
+    return axios.patch(`${apiBaseUrl}/users/${userId}`, userData);
+};
