@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextField, Box, Typography, LinearProgress, Button } from "@mui/material";
 import UpdateUserModal from "./updateModal";
+import DeleteConfirmationModal from "../common/deleteConfirmationModal";
+import { TextField, Box, Typography, LinearProgress, Button } from "@mui/material";
 import "../../styles/userList.css";
+
 
 const UserTable = ({ users, loading, handleUpdateUser, handleDeleteUser }) => {
     const [searchText, setSearchText] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const [deleteUserId, setDeleteUserId] = useState(null);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     // Filter users based on search input
     const filteredUsers = users.filter((user) =>
@@ -20,8 +24,8 @@ const UserTable = ({ users, loading, handleUpdateUser, handleDeleteUser }) => {
     };
 
     const handleDelete = (id) => {
-        console.log("Delete the user with id:", id);
-        handleDeleteUser(id);
+        setDeleteUserId(id);
+        setOpenDeleteModal(true);
     };
 
     const columns = [
@@ -96,6 +100,15 @@ const UserTable = ({ users, loading, handleUpdateUser, handleDeleteUser }) => {
                     handleUpdateUser={handleUpdateUser}
                 />
             )}
+            {/* User Delete Confirmation Modal */}
+            {openDeleteModal && <DeleteConfirmationModal
+                open={openDeleteModal}
+                onClose={() => setOpenDeleteModal(false)}
+                itemId={deleteUserId}
+                handleDelete={handleDeleteUser}
+                itemName="this user"
+                message="Are you sure you want to remove this user permanently?"
+            />}
         </Box>
     );
 };

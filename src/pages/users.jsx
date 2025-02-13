@@ -29,23 +29,24 @@ export const UserList = () => {
     const [alert, setAlert] = useState({ open: false, message: "", severity: "" });
 
     useEffect(() => {
-        const getUsers = async () => {
-            try {
-                const response = await getAllUsers();
-                if (response.data?.status) {
-                    setUsers(response.data.data);
-                } else {
-                    setAlert({ open: true, message: response.data?.message, severity: "error" });
-                }
-            } catch (error) {
-                console.error("Failed to fetch users", error);
-                setAlert({ open: true, message: error.message, severity: "error" });
-            } finally {
-                setLoading(false);
-            }
-        };
         getUsers();
     }, []);
+
+    const getUsers = async () => {
+        try {
+            const response = await getAllUsers();
+            if (response.data?.status) {
+                setUsers(response.data.data);
+            } else {
+                setAlert({ open: true, message: response.data?.message, severity: "error" });
+            }
+        } catch (error) {
+            console.error("Failed to fetch users", error);
+            setAlert({ open: true, message: error.message, severity: "error" });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleUpdate = async (userData) => {
         try {
@@ -68,13 +69,12 @@ export const UserList = () => {
     };
 
     const handleDelete = async (userId) => {
-        if (!window.confirm("Are you sure you want to delete this user?")) return;
 
         try {
             setLoading(true);
             const response = await deleteUser(userId);
-            // Remove the user form user list table
-            setUsers(users.filter(user => user.id !== userId));
+            // setUsers(users.filter(user => user.id !== userId)); // Remove the user form user list table
+            getUsers(); // Load fresh user list to the table
             setAlert({ open: true, message: response.data?.message, severity: "success" });
         } catch (error) {
             console.error("Delete failed:", error);
