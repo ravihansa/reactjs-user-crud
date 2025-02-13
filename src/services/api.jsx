@@ -13,3 +13,7 @@ export const getAllUsers = async () => {
 export const updateUser = async (userId, userData) => {
     return axios.patch(`${apiBaseUrl}/users/${userId}`, userData);
 };
+
+export const deleteUser = async (userId) => {
+    return axios.delete(`${apiBaseUrl}/users/${userId}`);
+};

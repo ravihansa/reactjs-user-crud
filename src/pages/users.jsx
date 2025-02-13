@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserTable from "../components/user/userTable";
 import RegisterForm from "../components/user/userForm";
 import { Alert, Snackbar } from "@mui/material";
-import { registerUser, getAllUsers, updateUser } from "../services/api";
+import { registerUser, getAllUsers, updateUser, deleteUser } from "../services/api";
 
 
 export const RegisterPage = () => {
@@ -67,6 +67,23 @@ export const UserList = () => {
         }
     };
 
+    const handleDelete = async (userId) => {
+        if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+        try {
+            setLoading(true);
+            const response = await deleteUser(userId);
+            // Remove the user form user list table
+            setUsers(users.filter(user => user.id !== userId));
+            setAlert({ open: true, message: response.data?.message, severity: "success" });
+        } catch (error) {
+            console.error("Delete failed:", error);
+            setAlert({ open: true, message: error.message, severity: "error" });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div>
             <Snackbar
@@ -80,7 +97,7 @@ export const UserList = () => {
                     {alert.message}
                 </Alert>
             </Snackbar>
-            <UserTable users={users} loading={loading} handleUpdateUser={handleUpdate} />
+            <UserTable users={users} loading={loading} handleUpdateUser={handleUpdate} handleDeleteUser={handleDelete} />
         </div>
     );
 };

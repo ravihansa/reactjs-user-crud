@@ -4,7 +4,7 @@ import { TextField, Box, Typography, LinearProgress, Button } from "@mui/materia
 import UpdateUserModal from "./updateModal";
 import "../../styles/userList.css";
 
-const UserTable = ({ users, loading, handleUpdateUser }) => {
+const UserTable = ({ users, loading, handleUpdateUser, handleDeleteUser }) => {
     const [searchText, setSearchText] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
     const [openModal, setOpenModal] = useState(false);
@@ -20,7 +20,8 @@ const UserTable = ({ users, loading, handleUpdateUser }) => {
     };
 
     const handleDelete = (id) => {
-        console.log("Delete user with ID:", id);
+        console.log("Delete the user with id:", id);
+        handleDeleteUser(id);
     };
 
     const columns = [
