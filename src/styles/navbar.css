@@ -1,0 +1,12 @@
+.navbar {
+    background-color: #cecece !important;
+    color: black !important;
+    box-shadow: none;
+    height: 50px;
+}
+
+.navbar .navbar-title {
+    font-weight: lighter;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
