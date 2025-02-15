@@ -3,12 +3,13 @@ import { logInUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import LogInForm from "../components/user/logInForm";
+import CustomAlert from "../components/common/customAlert";
 
 const LogInPage = () => {
 
-    const [alert, setAlert] = useState({ open: false, message: "", severity: "" });
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
+    const [alert, setAlert] = useState({ open: false, message: "", severity: "" });
 
     const handleLogIn = async (userData) => {
         try {
@@ -17,6 +18,7 @@ const LogInPage = () => {
                 const token = response.data.data?.accessToken;
                 login(token); // Store the token in AuthContext
                 navigate("/");
+                setAlert({ open: true, message: response.data?.message, severity: "success" });
             } else {
                 setAlert({ open: true, message: response.data?.message, severity: "error" });
             }
@@ -26,8 +28,15 @@ const LogInPage = () => {
     };
 
     return (
-        <LogInForm onLogIn={handleLogIn} />
-
+        <div>
+            <LogInForm onLogIn={handleLogIn} />
+            <CustomAlert
+                open={alert.open}
+                onClose={() => setAlert({ ...alert, open: false })}
+                severity={alert.severity}
+                message={alert.message}
+            />
+        </div>
     );
 };
 

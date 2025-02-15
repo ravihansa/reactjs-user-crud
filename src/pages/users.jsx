@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import UserTable from "../components/user/userTable";
 import RegisterForm from "../components/user/userForm";
-import { Alert, Snackbar } from "@mui/material";
 import { registerUser, getAllUsers, updateUser, deleteUser } from "../services/api";
-
+import CustomAlert from "../components/common/customAlert";
 
 export const RegisterPage = () => {
     const handleRegister = async (userData) => {
@@ -86,17 +85,12 @@ export const UserList = () => {
 
     return (
         <div>
-            <Snackbar
+            <CustomAlert
                 open={alert.open}
-                autoHideDuration={3000}
                 onClose={() => setAlert({ ...alert, open: false })}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}>
-                <Alert
-                    severity={alert.severity}
-                    onClose={() => setAlert({ ...alert, open: false })}>
-                    {alert.message}
-                </Alert>
-            </Snackbar>
+                severity={alert.severity}
+                message={alert.message}
+            />
             <UserTable users={users} loading={loading} handleUpdateUser={handleUpdate} handleDeleteUser={handleDelete} />
         </div>
     );
