@@ -4,15 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import LogInForm from "../components/user/logInForm";
 import CustomAlert from "../components/common/customAlert";
+import CustomLoader from "../components/common/customLoader";
 
 const LogInPage = () => {
 
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState({ open: false, message: "", severity: "" });
 
     const handleLogIn = async (userData) => {
         try {
+            setLoading(true);
             const response = await logInUser(userData);
             if (response.data?.status) {
                 const token = response.data.data?.accessToken;
@@ -24,6 +27,8 @@ const LogInPage = () => {
             }
         } catch (err) {
             setAlert({ open: true, message: err?.message, severity: "error" });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -36,6 +41,7 @@ const LogInPage = () => {
                 severity={alert.severity}
                 message={alert.message}
             />
+            {loading && <CustomLoader size={50} color="primary" />}
         </div>
     );
 };
