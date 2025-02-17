@@ -1,44 +1,10 @@
 import React, { useEffect, useState } from "react";
 import UserTable from "../components/user/userTable";
-import RegisterForm from "../components/user/userForm";
-import { registerUser, getAllUsers, updateUser, deleteUser } from "../services/api";
 import CustomAlert from "../components/common/customAlert";
-import CustomLoader from "../components/common/customLoader";
-import { useNavigate } from "react-router-dom";
+import { getAllUsers, updateUser, deleteUser } from "../services/api";
 
-export const RegisterPage = () => {
 
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-
-    const handleRegister = async (userData) => {
-
-        try {
-            setLoading(true);
-            const response = await registerUser(userData);
-            if (response.data?.status) {
-                alert(response.data?.message);
-                navigate("/");
-            } else {
-                alert(response.data?.message);
-            }
-        } catch (error) {
-            console.error("Registration failed:", error.message);
-            alert(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div>
-            {loading && <CustomLoader size={50} color="primary" />}
-            <RegisterForm onRegister={handleRegister} />
-        </div>
-    );
-};
-
-export const UserList = () => {
+const UsersPage = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [alert, setAlert] = useState({ open: false, message: "", severity: "" });
@@ -111,3 +77,5 @@ export const UserList = () => {
         </div>
     );
 };
+
+export default UsersPage;
