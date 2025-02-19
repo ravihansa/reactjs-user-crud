@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -7,6 +8,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                if (decoded.exp * 1000 < Date.now()) {
+                    logout();
+                }
+            } catch (err) {
+                logout();
+            }
             localStorage.setItem("jwt", token);
         } else {
             localStorage.removeItem("jwt");
